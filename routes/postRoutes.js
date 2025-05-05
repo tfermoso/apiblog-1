@@ -7,5 +7,6 @@ router.get('/my', verifyToken, postController.getPostsByUser);
 router.get('/', postController.getAllPosts);
 router.get('/:id', postController.getPostById);
 router.post('/', verifyToken, postController.createPost);
-
+router.delete('/:id', verifyToken, postController.deletePost);
+router.put('/:id', verifyToken, postController.updatePost);
 module.exports = router;

@@ -34,4 +34,23 @@ exports.createPost = (req, res) => {
     res.json({ message: 'Post creado', postId: result.insertId });
   });
 };
+exports.updatePost = (req, res) => {
+  const { id } = req.params;
+  const { titulo, descripcion } = req.body;
+  db.query(
+    'UPDATE posts SET titulo = ?, descripcion = ? WHERE id = ?',
+    [titulo, descripcion, id],
+    (err, result) => {
+      if (err || result.affectedRows === 0) return res.status(404).json({ error: 'Post no encontrado o error al actualizar' });
+      res.json({ message: 'Post actualizado' });
+    }
+  );
+};
+exports.deletePost = (req, res) => {
+  const { id } = req.params;
+  db.query('DELETE FROM posts WHERE id = ?', [id], (err, result) => {
+    if (err || result.affectedRows === 0) return res.status(404).json({ error: 'Post no encontrado' });
+    res.json({ message: 'Post eliminado' });
+  });
+}
 
