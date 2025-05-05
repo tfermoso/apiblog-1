@@ -7,6 +7,14 @@ exports.getAllPosts = (req, res) => {
   });
 };
 
+exports.getPostsByUser = (req, res) => {
+  const userId = req.user.id;
+  db.query('SELECT * FROM posts WHERE user_id = ?', [userId], (err, results) => {
+    if (err) return res.status(500).json({ error: 'Error al obtener posts del usuario' });
+    res.json(results);
+  });
+};
+
 exports.getPostById = (req, res) => {
   const { id } = req.params;
   db.query('SELECT * FROM posts WHERE id = ?', [id], (err, results) => {
