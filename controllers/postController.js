@@ -1,7 +1,7 @@
 const db = require('../config/db');
 
 exports.getAllPosts = (req, res) => {
-  db.query('SELECT * FROM posts', (err, results) => {
+  db.query('SELECT posts.*, users.username FROM posts JOIN users ON posts.user_id = users.id', (err, results) => {
     if (err) return res.status(500).json({ error: 'Error al obtener posts' });
     res.json(results);
   });
