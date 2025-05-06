@@ -1,19 +1,20 @@
-const mysql = require('mysql2');
+const { Pool } = require('pg');
 require('dotenv').config();
 
-const db = mysql.createConnection({
-  host: process.env.DB_HOST,
-  user: process.env.DB_USER,
-  password: process.env.DB_PASSWORD,
-  database: process.env.DB_NAME,
+const pool = new Pool({
+  connectionString: process.env.DATABASE_URL, // Único string completo
+  ssl: {
+    rejectUnauthorized: false, // necesario para Render
+  },
 });
 
-db.connect((err) => {
+pool.connect((err, client, release) => {
   if (err) {
-    console.error('Error al conectar a la base de datos:', err);
-    process.exit(1); // Salir si hay un error
+    console.error('Error al conectar a la base de datos PostgreSQL:', err.stack);
+    process.exit(1);
   }
-  console.log('Conexión a la base de datos establecida');
+  console.log('Conexión a PostgreSQL establecida');
+  release(); // libera el cliente al pool
 });
 
-module.exports = db;
+module.exports = pool;
